@@ -8,11 +8,11 @@ public class Indicators.Plug : Switchboard.Plug {
         settings.set ("indicators", null);
 
         Object (
-            category: Category.SYSTEM,
+            category: Category.PERSONAL,
             code_name: "com.github.mvbonin.switchboard-plug-indicators",
             display_name: "Indicators",
             description: "Change community-indicators settings.",
-            icon: "application-x-firmware",
+            icon: "view-more-horizontal-symbolic",
             supported_settings: settings
         );
     }
@@ -26,6 +26,8 @@ public class Indicators.Plug : Switchboard.Plug {
             var lbl = new Gtk.Label ("Test Plug");
             lbl.set_text ("Test Plug");
             main_grid.attach(lbl, 0, 0);
+            main_grid.show ();
+            lbl.show ();
 
         }
 
