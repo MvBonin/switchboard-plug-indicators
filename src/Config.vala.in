@@ -1,0 +1,5 @@
+
+namespace Indicators {
+	private const string GETTEXT_PACKAGE = "@GETTECT_PACKAGE@";
+	private const string LOCALEDIR = "@LOCALEDIR@";
+}
