@@ -2,3 +2,4 @@
 
 deps:
 	libswitchboard-2.0-dev
+	libjson-glib-dev

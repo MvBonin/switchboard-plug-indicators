@@ -2,10 +2,12 @@
 
 public class Indicators.Plug : Switchboard.Plug {
     private Gtk.Grid main_grid;
-
+    private SettingUtils? settings_util;
     public Plug () {
         var settings = new Gee.TreeMap<string, string?> (null, null);
         settings.set ("indicators", null);
+
+        
 
         Object (
             category: Category.PERSONAL,
@@ -15,6 +17,8 @@ public class Indicators.Plug : Switchboard.Plug {
             icon: "view-more-horizontal-symbolic",
             supported_settings: settings
         );
+        settings_util = new SettingUtils ();
+        
     }
 
     public override Gtk.Widget get_widget () {
