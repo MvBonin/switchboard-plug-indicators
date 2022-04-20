@@ -5,30 +5,47 @@ public class Indicators.SettingUtils {
 
     string settingsDir = GLib.Environment.get_home_dir () + "/.config/indicators/";
     string settingsFile = "indicators.json";
+    string settingsIndicators = "indicatorNames.json";
     GLib.File settings_File;
+    GLib.File settings_IndicatorNames_File;
+    GLib.FileMonitor monitor; //To monitor changes to allIndicators
+
 
     private Gee.HashSet<string> namarupaIndicators;
-    private bool showEmptyNamarupa;
+    private Gee.HashSet<string> allIndicatorNames;
+    private bool showEmptyNamarupaIndicator;
     public bool isInstalled = true;
 
     public SettingUtils () {
         namarupaIndicators = new Gee.HashSet<string> ();
-        namarupaIndicators.add("ulauncher");
-        namarupaIndicators.add("Nextcloud");
+        allIndicatorNames = new Gee.HashSet<string> ();
+        
         settings_File = File.new_for_commandline_arg(settingsDir + settingsFile);
-        if(!settings_File.query_exists ()){
-            print("Settings file " + settings_File.get_path () + " doesn't exists. Please install community indicators first.\n");
+        settings_IndicatorNames_File = File.new_for_commandline_arg(settingsDir + settingsIndicators);
+
+        if(!settings_File.query_exists () || !settings_IndicatorNames_File.query_exists ()){
+            print("Settings files in " + settingsDir + " doesn't exist. Please install community indicators first and restart io.elementary.wingpanel.\n");
             isInstalled = false;
         } else {
-            print(read_file(settings_File));
+            print(read_file(settings_File) + "\n");
             write_file(settings_File, generate_Json_String());
+            get_Settings_from_Json_string(generate_Json_String());
+            allIndicatorNames = getIndicatorNamesFromFile (settings_IndicatorNames_File);
         }
 
-        
+        monitor = settings_IndicatorNames_File.monitor ( //to track directory use .monitor_directory
+            GLib.FileMonitorFlags.NONE
+        );
+        monitor.changed.connect(allIndicatorsFileChanged);
+        print("Monitoring: " + settings_IndicatorNames_File.get_path() + "\n");
+
     }
 
 
-
+    private void allIndicatorsFileChanged () {
+        print("All indicators file changed. Maybe there is a new Indicator. Reloading list.\n");
+        allIndicatorNames = getIndicatorNamesFromFile (settings_IndicatorNames_File);
+    }
     private string read_file(File file) {
         string output;
         try {
@@ -67,7 +84,7 @@ public class Indicators.SettingUtils {
         builder.add_boolean_value (true);
         builder.end_object ();*/
 
-        builder.set_member_name ("showEmptyNamarupa");
+        builder.set_member_name ("showEmptyNamarupaIndicator");
         builder.add_boolean_value (true);
         builder.end_object ();
 
@@ -81,5 +98,35 @@ public class Indicators.SettingUtils {
         return str;
     }
 
+    private void get_Settings_from_Json_string (string jsonString) {
+        Json.Parser parser = new Json.Parser ();
+        parser.load_from_data (jsonString, -1);
+        Json.Node root = parser.get_root ();
+
+        Json.Array nama_indicator_list = root.get_object ().get_array_member ("namarupaIndicators");
+        foreach (var node in nama_indicator_list.get_elements ()){
+            //print("IND: " + node.get_string () + "\n");
+            this.namarupaIndicators.add(node.get_string ());
+        }
+        showEmptyNamarupaIndicator = root.get_object ().get_boolean_member ("showEmptyNamarupaIndicator");
+        
+    }
+
+    private Gee.HashSet<string> getIndicatorNamesFromFile (File file) {
+        Gee.HashSet<string> allIndicatorNames = new Gee.HashSet<string> ();
+
+        string jsonString = read_file (file);
+
+        Json.Parser parser = new Json.Parser ();
+        parser.load_from_data (jsonString, -1);
+        Json.Node root = parser.get_root ();
+
+        Json.Array indicator_list = root.get_object ().get_array_member ("allIndicators");
+        foreach (var node in indicator_list.get_elements ()){
+            print("all Indicators, got name: " + node.get_string () + "\n");
+            allIndicatorNames.add(node.get_string ());
+        }
+        return allIndicatorNames;
+    }
 
 }
