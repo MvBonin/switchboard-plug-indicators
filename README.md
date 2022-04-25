@@ -23,6 +23,6 @@ sudo ninja install
 
 4. Follow step 2 from easy install (parameters) and reboot.
 
-<h2>uninstall</h2>
+<h2>Uninstall</h2>
 Open a terminal in the build folder.
 <pre>sudo ninja uninstall</pre>

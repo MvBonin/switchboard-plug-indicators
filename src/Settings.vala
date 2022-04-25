@@ -27,9 +27,8 @@ public class Indicators.SettingUtils {
             print("Settings files in " + settingsDir + " doesn't exist. Please install community indicators first and restart io.elementary.wingpanel.\n");
             isInstalled = false;
         } else {
-            print(read_file(settings_File) + "\n");
-            write_file(settings_File, generate_Json_String());
-            get_Settings_from_Json_string(generate_Json_String());
+            //write_file(settings_File, generate_Json_String());
+            get_Settings_from_Json_string(read_file(settings_File));
             allIndicatorNames = getIndicatorNamesFromFile (settings_IndicatorNames_File);
         }
 
@@ -105,7 +104,7 @@ public class Indicators.SettingUtils {
 
         Json.Array nama_indicator_list = root.get_object ().get_array_member ("namarupaIndicators");
         foreach (var node in nama_indicator_list.get_elements ()){
-            //print("IND: " + node.get_string () + "\n");
+            print("Namarupa Indicator, got: " + node.get_string () + "\n");
             this.namarupaIndicators.add(node.get_string ());
         }
         showEmptyNamarupaIndicator = root.get_object ().get_boolean_member ("showEmptyNamarupaIndicator");
@@ -129,4 +128,56 @@ public class Indicators.SettingUtils {
         return allIndicatorNames;
     }
 
+    public Gee.HashSet<string> getAllIndicatorNames (){
+        if(allIndicatorNames == null){
+            allIndicatorNames = getIndicatorNamesFromFile (settings_IndicatorNames_File);
+        }
+        return this.allIndicatorNames;
+    }
+
+    public Gee.HashSet<string> getNonNamarupaIndicatorNames (){
+        Gee.HashSet<string> out = new Gee.HashSet<string> ();
+        
+        if(allIndicatorNames == null){
+            allIndicatorNames = getIndicatorNamesFromFile (settings_IndicatorNames_File);
+            
+        }
+        foreach (string allIn in allIndicatorNames) {
+            if(! this.namarupaIndicators.contains(allIn)){
+                out.add(allIn);
+            }
+        }
+
+        return out;
+    }  
+    public void toggleNamarupaForIndicator (string name) {
+        //If name is inside NamarupaIndicators, delete it there, otherwise add it.
+        if (getNamarupaIndicatorNames ().contains (name)){
+            this.namarupaIndicators.remove (name);
+        } else {
+            this.namarupaIndicators.add (name);
+        }
+        updateSettingsFile ();
+    }
+
+    private void updateSettingsFile (){
+        write_file(settings_File, generate_Json_String());
+        settings_updated ();
+    }
+
+    public Gee.HashSet<string> getNamarupaIndicatorNames (){
+        if (this.namarupaIndicators == null) {
+            get_Settings_from_Json_string(read_file(settings_File));
+        }
+        return this.namarupaIndicators;
+    }
+
+    public string getIndicatorPath (){
+        return (this.settingsDir + "icons/");
+    }
+    public bool getShowEmptyNamarupa () {
+        return this.showEmptyNamarupaIndicator;
+    }
+
+    public signal void settings_updated ();
 }
