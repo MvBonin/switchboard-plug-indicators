@@ -1,6 +1,6 @@
 # This will become a Switchboard Plug for the Community Indictors Project.
 
-<p align="center"><img src="screenshot.png"/> </p>
+<p align="center"><img src="screenshot-switchboard.png"/> </p>
 
 <h1>Description:</h1>
 This is a switchboard plug for elementary switchboard, that lets you change settings for <a href="https://github.com/MvBonin/wingpanel-community-indicators">wingpanel-community-indicators</a>.
