@@ -1,0 +1,7 @@
+com.github.mvbonin.switchboard-plug-indicators (0.1) focal; urgency=medium
+
+switchboard-plug-indicators (0.1) trusty; urgency=low
+
+  * Initial Release.
+
+ -- MvBonin <mvbonin@bonintech.de>  Wed, 6 Jul 2022 18:20:26 -0100

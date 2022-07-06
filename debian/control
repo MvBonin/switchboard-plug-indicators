@@ -1,0 +1,21 @@
+Source: com.github.mvbonin.switchboard-plug-indicators
+Section: x11
+Priority: optional
+Maintainer: MvBonin <mvbonin@bonintech.de>
+Build-Depends: debhelper (>= 11),
+               libglib2.0-dev,
+               libgranite-dev,
+               libgtk-3-dev (>= 3.12),
+               libjson-glib-dev,
+               libappstream-dev,
+               libswitchboard-2.0-dev,
+               meson,
+               valac (>= 0.40.0)
+Standards-Version: 4.1.4
+
+Package: com.github.mvbonin.switchboard-plug-indicators
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Enhances: switchboard
+Description: Switchboard Plug for Indicators
+ Switchboard plug for wingpanel ayatana community indicators

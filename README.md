@@ -12,6 +12,10 @@ It is still work in progress but some stuff works (if not yet so pretty).
 <h2>Dependencies:</h2>
 <pre>sudo apt-get install valac gcc meson libappstream-dev libjson-glib-dev libswitchboard-2.0-dev</pre/>
 
+<h2>Easy Installation</h2>
+Download .deb file and install it via
+<pre>sudo apt install ./FILENAME.deb</pre>
+
 <h2>Build with meson</h2>
 Open a Terminal in the extracted folder, build your application with meson and install it with ninja:<br/>
 
