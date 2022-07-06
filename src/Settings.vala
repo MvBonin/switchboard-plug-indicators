@@ -122,7 +122,7 @@ public class Indicators.SettingUtils {
 
         Json.Array indicator_list = root.get_object ().get_array_member ("allIndicators");
         foreach (var node in indicator_list.get_elements ()){
-            print("all Indicators, got name: " + node.get_string () + "\n");
+            //print("all Indicators, got name: " + node.get_string () + "\n");
             allIndicatorNames.add(node.get_string ());
         }
         return allIndicatorNames;

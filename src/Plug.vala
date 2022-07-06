@@ -34,7 +34,8 @@ public class Indicators.Plug : Switchboard.Plug {
         foreach (var name in strings) {
 
             Gtk.Button but = new Gtk.Button();
-            GLib.File file = File.new_for_commandline_arg ( settings_util.getIndicatorPath () + name + ".png" );
+
+            GLib.File file = File.new_for_commandline_arg ( settings_util.getIndicatorPath () + name.replace("/", "..") + ".png" );
             if(file.query_exists ()) {
                 Gdk.Pixbuf pix = new Gdk.Pixbuf.from_file_at_scale (file.get_path () , 16, 16, true);
             
